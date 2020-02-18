@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package validatorrpcproto;
+message PingRequest {
+	string nodeID = 1;
+	string userAgent = 2;
+}
+
+message PingResponse {
+	string userAgent = 1;
+	string clientAddr = 2;
+}
+message GetNodeInfoRequest{}
+
+message GetNodeInfoResponse{
+    bytes PublicKey = 1;
+}
+message UserAccountCreateRequest{
+   string ClientPublicKey = 1;
+   string EncruptedClientPrivateKey = 2;
+   string Nonce = 3;
+}
+
+message UserAccountCreateResponse{
+  string Signature = 1;
+  string RecoveryToken = 2;
+}
+
+message CardActivateRequest{
+  string ClientPublicKey = 1;
+  string CardPublicKey = 2;
+  string CardActivationToken = 3;
+  string CardPIN = 4;
+  string Nonce = 5;
+  string ClientSignature = 6;
+}
+
+message CardActivateResponse{
+  string Signature = 1;
+}
+
+message CardUpdatePINRequest{
+  string ClientPublicKey = 1;
+  string CardPublicKey = 2;
+  string CardPIN = 3;
+  string Nonce = 4;
+  string ClientSignature = 5;
+}
+
+message CardUpdatePINResponse{
+  string Signature = 1;
+}
+
+message UserAccountInfoRequest{
+  string ClientPublicKey = 1;
+}
+message UserAccountInfoResponse{
+  string ClientPublicKey = 1;
+  string CardPublicKey = 2;
+  uint64 Balance = 3;
+  bool Active = 4;
+}
+
+message AccountBalanceRequest{
+  string ClientPublicKey = 1;
+}
+
+message AccountBalanceResponse{
+  uint64 Balance = 1;
+}
+
+message GetWalletOnChainAddrRequest{
+  string ClientPublicKey = 1;
+}
+message GetWalletOnChainAddrResponse{
+  string Wallet = 1;
+}
+message GetWalletOffChainAddrRequest{
+  string ClientPublicKey = 1;
+  string Amount = 2;
+}
+message GetWalletOffChainAddrResponse{
+  string Invoice = 1;
+}
+message AddFundsOnChainRequest{
+  string ClientPublicKey = 1;
+  string TxId = 2;
+}
+message AddFundsOnChainResponse{}
+message AddFundsOffChainRequest{
+  string ClientPublicKey = 1;
+  string PaymentHash = 2;
+  string PaymentPreimage = 3;
+
+}
+message AddFundsOffChainResponse{}
+
+message TransactionListRequest{
+  string ClientPublicKey = 1;
+}
+message TransactionListResponse{}
+
+service NodeRPC {
+    rpc Ping(PingRequest) returns (PingResponse) {}
+    rpc GetNodeInfo(GetNodeInfoRequest) returns (GetNodeInfoResponse){}
+    rpc UserAccountCreate(UserAccountCreateRequest) returns (UserAccountCreateResponse){}
+    rpc CardActivate(CardActivateRequest) returns (CardActivateResponse){}
+    rpc CardUpdatePIN(CardUpdatePINRequest) returns (CardUpdatePINResponse){}
+    rpc UserAccountInfo(UserAccountInfoRequest) returns (UserAccountInfoResponse){}
+    rpc AccountBalance(AccountBalanceRequest) returns (AccountBalanceResponse){}
+
+    rpc GetWalletOnChainAddr(GetWalletOnChainAddrRequest) returns (GetWalletOnChainAddrResponse){}
+    rpc GetWalletOffChainAddr(GetWalletOffChainAddrRequest) returns (GetWalletOffChainAddrResponse){}
+    rpc AddFundsOnChain(AddFundsOnChainRequest) returns (AddFundsOnChainResponse){}
+    rpc AddFundsOffChain(AddFundsOffChainRequest) returns (AddFundsOffChainResponse){}
+
+    rpc TransactionList(TransactionListRequest) returns (TransactionListResponse){}
+}
